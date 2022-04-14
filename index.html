@@ -1,0 +1,1425 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatile" content="ie=edge">
+    <title>Web IM</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="./dist/media/img/favicon.png" type="image/png">
+
+    <!-- Bundle Styles -->
+    <link rel="stylesheet" href="./vendor/bundle.css">
+
+    <link rel="stylesheet" href="./vendor/enjoyhint/enjoyhint.css">
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="./dist/css/app.min.css">
+    <style>
+        .avatar img:hover { 
+            cursor: pointer;
+            -webkit-transition: 3s linear;transition:3 ease-in;
+            -webkit-transform:rotate(720deg);transform:rotate(720deg);
+        }
+    </style>
+</head>
+<body id="app">
+<!-- page loading -->
+<div class="page-loading"></div>
+<!-- ./ page loading -->
+
+<!-- page tour modal -->
+<div class="modal fade" id="pageTour" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center pt-5">
+                <div class="row">
+                    <div class="col-md-6 offset-3">
+                        <figure>
+                            <img src="dist/media/svg/undraw_product_tour_foyt.svg" class="img-fluid" alt="image">
+                        </figure>
+                        <p class="lead mt-5">Would you like to take a short page tour?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-primary start-tour">Start Tour</button>
+                <button type="button" class="btn btn-link" data-dismiss="modal" aria-label="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./ page tour modal -->
+
+<!-- disconnected modal -->
+<div class="modal fade" id="disconnected" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row mb-5">
+                    <div class="col-md-6 offset-3">
+                        <img src="./dist/media/svg/undraw_warning_cyit.svg" class="img-fluid" alt="image">
+                    </div>
+                </div>
+                <p class="lead text-center">Application disconnected</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-success btn-lg">Reconnect</button>
+                <a href="login.html" class="btn btn-link">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./ disconnected modal -->
+
+<!-- voice call modal -->
+<div class="modal call fade" id="call" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="call">
+                    <div>
+                        <figure class="mb-4 avatar avatar-xl">
+                            <img src="./dist/media/img/women_avatar1.jpg" class="rounded-circle" alt="image">
+                        </figure>
+                        <h4>Brietta Blogg <span class="text-success">calling...</span></h4>
+                        <div class="action-button">
+                            <button type="button" class="btn btn-danger btn-floating btn-lg" data-dismiss="modal">
+                                <i data-feather="x"></i>
+                            </button>
+                            <button type="button" class="btn btn-success btn-pulse btn-floating btn-lg">
+                                <i data-feather="phone"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./ voice call modal -->
+
+<!-- voice call modal -->
+<div class="modal call fade" id="videoCall" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="call">
+                    <div>
+                        <figure class="mb-4 avatar avatar-xl">
+                            <img src="./dist/media/img/women_avatar1.jpg" class="rounded-circle" alt="image">
+                        </figure>
+                        <h4>Brietta Blogg <span class="text-success">video calling...</span></h4>
+                        <div class="action-button">
+                            <button type="button" class="btn btn-danger btn-floating btn-lg" data-dismiss="modal">
+                                <i data-feather="x"></i>
+                            </button>
+                            <button type="button" class="btn btn-success btn-pulse btn-floating btn-lg">
+                                <i data-feather="video"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./ voice call modal -->
+
+<!-- add friends modal -->
+<div class="modal fade" id="addFriends" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i data-feather="user-plus" class="mr-2"></i> Add Friends
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="ti-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">Send invitations to friends.</div>
+                <form>
+                    <div class="form-group">
+                        <label for="emails" class="col-form-label">Email addresses</label>
+                        <input type="text" class="form-control" id="emails">
+                    </div>
+                    <div class="form-group">
+                        <label for="message" class="col-form-label">Invitation message</label>
+                        <textarea class="form-control" id="message"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./ add friends modal -->
+
+<!-- new group modal -->
+<div class="modal fade" id="newGroup" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i data-feather="users" class="mr-2"></i> New Group
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="ti-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="group_name" class="col-form-label">Group name</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="group_name">
+                            <div class="input-group-append">
+                                <button class="btn btn-light" data-toggle="tooltip" title="Emoji" type="button">
+                                    <i data-feather="smile"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mb-2">The group members</p>
+                    <div class="form-group">
+                        <div class="avatar-group">
+                            <figure class="avatar" data-toggle="tooltip" title="Tobit Spraging">
+                                <span class="avatar-title bg-success rounded-circle">T</span>
+                            </figure>
+                            <figure class="avatar" data-toggle="tooltip" title="Cloe Jeayes">
+                                <img src="./dist/media/img/women_avatar4.jpg" class="rounded-circle" alt="image">
+                            </figure>
+                            <figure class="avatar" data-toggle="tooltip" title="Marlee Perazzo">
+                                <span class="avatar-title bg-warning rounded-circle">M</span>
+                            </figure>
+                            <figure class="avatar" data-toggle="tooltip" title="Stafford Pioch">
+                                <img src="./dist/media/img/man_avatar1.jpg" class="rounded-circle" alt="image">
+                            </figure>
+                            <figure class="avatar" data-toggle="tooltip" title="Bethena Langsdon">
+                                <span class="avatar-title bg-info rounded-circle">B</span>
+                            </figure>
+                            <a href="#" title="Add friends">
+                                <figure class="avatar">
+                                    <span class="avatar-title bg-primary rounded-circle">
+                                        <i data-feather="plus"></i>
+                                    </span>
+                                </figure>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="col-form-label">Description</label>
+                        <textarea class="form-control" id="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Create Group</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./ new group modal -->
+
+<!-- setting modal -->
+<div class="modal fade" id="settingModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i data-feather="settings" class="mr-2"></i> Settings
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="ti-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#account" role="tab" aria-controls="account"
+                           aria-selected="true">Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#notification" role="tab"
+                           aria-controls="notification" aria-selected="false">Notification</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+                           aria-selected="false">Security</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane show active" id="account" role="tabpanel">
+                        <div class="form-item custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" checked id="customSwitch1">
+                            <label class="custom-control-label" for="customSwitch1">Allow connected contacts</label>
+                        </div>
+                        <div class="form-item custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" checked id="customSwitch2">
+                            <label class="custom-control-label" for="customSwitch2">Confirm message requests</label>
+                        </div>
+                        <div class="form-item custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" checked id="customSwitch3">
+                            <label class="custom-control-label" for="customSwitch3">Profile privacy</label>
+                        </div>
+                        <div class="form-item custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch4">
+                            <label class="custom-control-label" for="customSwitch4">Developer mode options</label>
+                        </div>
+                        <div class="form-item custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" checked id="customSwitch5">
+                            <label class="custom-control-label" for="customSwitch5">Two-step security
+                                verification</label>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="notification" role="tabpanel">
+                        <div class="form-item custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" checked id="customSwitch6">
+                            <label class="custom-control-label" for="customSwitch6">Allow mobile notifications</label>
+                        </div>
+                        <div class="form-item custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch7">
+                            <label class="custom-control-label" for="customSwitch7">Notifications from your
+                                friends</label>
+                        </div>
+                        <div class="form-item custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch8">
+                            <label class="custom-control-label" for="customSwitch8">Send notifications by email</label>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="contact" role="tabpanel">
+                        <div class="form-item custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch9">
+                            <label class="custom-control-label" for="customSwitch9">Suggest changing passwords every
+                                month.</label>
+                        </div>
+                        <div class="form-item custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" checked id="customSwitch10">
+                            <label class="custom-control-label" for="customSwitch10">Let me know about suspicious
+                                entries to your account</label>
+                        </div>
+                        <div class="form-item">
+                            <p>
+                                <a class="btn btn-light" data-toggle="collapse" href="#collapseExample" role="button"
+                                   aria-expanded="false"
+                                   aria-controls="collapseExample">
+                                    <i data-feather="plus" class="mr-2"></i> Security Questions
+                                </a>
+                            </p>
+                            <div class="collapse" id="collapseExample">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Question 1">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Answer 1">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Question 2">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Answer 2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ./ setting modal -->
+
+<!-- edit profile modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i data-feather="edit-2" class="mr-2"></i> 编辑信息
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="ti-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#personal" role="tab"
+                           aria-controls="personal" aria-selected="true">个人信息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#about" role="tab" aria-controls="about"
+                           aria-selected="false">个人签名</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane show active" id="personal" role="tabpanel">
+                        <form>
+                            <div class="form-group">
+                                <label for="fullname" class="col-form-label">昵称</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="fullname" placeholder="昵称" :value="userInfo.nickname">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i data-feather="user"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">头像</label>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <figure class="avatar mr-3 item-rtl">
+                                            <img :src="userInfo.avatar" class="rounded-circle"
+                                                 alt="image">
+                                        </figure>
+                                    </div>
+
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile">选择头像</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="city" class="col-form-label">城市</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="city" placeholder="城市" :value="userInfo.city">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i data-feather="target"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" class="col-form-label">手机号</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="phone" placeholder="手机号" :value="userInfo.mobile">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i data-feather="phone"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="website" class="col-form-label">网站</label>
+                                <input type="text" class="form-control" id="website" placeholder="https://" :value="userInfo.website">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="about" role="tabpanel">
+                        <form>
+                            <div class="form-group">
+                                <label for="about-text" class="col-form-label">个性签名</label></label>
+                                <textarea class="form-control" id="about-text" :value="userInfo.motto"></textarea>
+                            </div>                        
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./ edit profile modal -->
+
+<!-- layout -->
+<div class="layout">
+    <!-- 左侧边栏 -->
+    <!-- navigation -->
+    <nav class="navigation">
+        <div class="nav-group">
+            <ul>
+                <li>
+                    <a class="active" data-navigation-target="chats" href="#" data-toggle="tooltip" title="聊天"
+                       data-placement="right">
+                        <span class="badge badge-warning"></span>
+                        <i data-feather="message-circle"></i>
+                    </a>
+                </li>
+                <li>
+                    <a data-navigation-target="friends" href="#" data-toggle="tooltip"
+                       title="好友" data-placement="right">
+                        <span class="badge badge-danger"></span>
+                        <i data-feather="user"></i>
+                    </a>
+                </li>
+                <li>
+                    <a data-navigation-target="favorites" data-toggle="tooltip" title="收藏" data-placement="right"
+                       href="#">
+                        <i data-feather="star"></i>
+                    </a>
+                </li>
+                <li class="brackets">
+                    <a data-navigation-target="archived" href="#" data-toggle="tooltip"
+                       title="存档" data-placement="right">
+                        <i data-feather="archive"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="dark-light-switcher" data-toggle="tooltip" title="深色模式"
+                       data-placement="right">
+                        <i data-feather="moon"></i>
+                    </a>
+                </li>
+                <li data-toggle="tooltip" title="个人中心" data-placement="right">
+                    <a href="./login.html" data-toggle="dropdown">
+                        <figure class="avatar">
+                            <img :src="userInfo.avatar" class="rounded-circle" alt="image">
+                        </figure>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editProfileModal">编辑信息</a>
+                        <a href="#" class="dropdown-item" data-navigation-target="contact-information">个人信息</a>
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#settingModal">设置</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="javascript:void(0)"class="dropdown-item text-danger" @click="logout()">退出登录</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- 左侧边栏 -->
+    <!-- ./ navigation -->
+
+    <!-- content -->
+    <div class="content">
+
+        <!-- sidebar group -->
+        <div class="sidebar-group">
+
+            <!-- Chats sidebar -->
+            <div id="chats" class="sidebar active">
+                <header>
+                    <span>消息列表</span>
+                    <ul class="list-inline">
+                        <li class="list-inline-item" data-toggle="tooltip" title="New group">
+                            <a class="btn btn-outline-light" href="#" data-toggle="modal" data-target="#newGroup">
+                                <i data-feather="users"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light" data-toggle="tooltip" title="New chat" href="#"
+                               data-navigation-target="friends">
+                                <i data-feather="plus-circle"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item d-xl-none d-inline">
+                            <a href="#" class="btn btn-outline-light text-danger sidebar-close">
+                                <i data-feather="x"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </header>
+                <form>
+                    <input type="text" class="form-control" placeholder="搜索联系人">
+                </form>
+                <div class="sidebar-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" v-for="(item, index) in talksList" :index="index" @click="setChat(index)">
+                            <figure class="avatar avatar-state-success">
+                                <img :src="item.user.avatar" class="rounded-circle" alt="image" v-if="item.user.avatar">
+                                <span class="avatar-title bg-info rounded-circle" v-if="!item.user.avatar">{{A}}</span>
+                            </figure>
+                       
+                            <div class="users-list-body">
+                                <div>
+                                    <h5 class="text-primary">{{item.user.nickname}}</h5>
+                                    <p>What's up, how are you?</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="new-message-count">3</div>
+                                    <small class="text-primary">03:41 PM</small>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- <li class="list-group-item">
+                            <figure class="avatar avatar-state-warning">
+                                <img src="./dist/media/img/man_avatar4.jpg" class="rounded-circle" alt="image">
+                            </figure>
+                            <div class="users-list-body">
+                                <div>
+                                    <h5 class="text-primary">Forest Kroch</h5>
+                                    <p>
+                                        <i class="fa fa-camera mr-1"></i> Photo
+                                    </p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="new-message-count">1</div>
+                                    <small class="text-primary">Yesterday</small>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        
+                        <li class="list-group-item">
+                            <figure class="avatar">
+                                <span class="avatar-title bg-warning bg-success rounded-circle">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </figure>
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>😍 My Family 😍</h5>
+                                    <p><strong>Maher Ruslandi: </strong>Hello!!!</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <small class="text-muted">Yesterday</small>
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">Open</a>
+                                                <a href="#" data-navigation-target="contact-information"
+                                                   class="dropdown-item">Profile</a>
+                                                <a href="#" class="dropdown-item">Add to archive</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item text-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <figure class="avatar avatar-state-warning">
+                                    <img src="./dist/media/img/women_avatar1.jpg" class="rounded-circle" alt="image">
+                                </figure>
+                            </div>
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>Jennica Kindred</h5>
+                                    <p>
+                                        <i class="fa fa-video-camera mr-1"></i>
+                                        Video
+                                    </p>
+                                </div>
+                                <div class="users-list-action">
+                                    <small class="text-muted">03:41 PM</small>
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">Open</a>
+                                                <a href="#" data-navigation-target="contact-information"
+                                                   class="dropdown-item">Profile</a>
+                                                <a href="#" class="dropdown-item">Add to archive</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item text-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <figure class="avatar">
+                                    <span class="avatar-title bg-info rounded-circle">M</span>
+                                </figure>
+                            </div>
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>Marvin Rohan</h5>
+                                    <p>Have you prepared the files?</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <small class="text-muted">Yesterday</small>
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">Open</a>
+                                                <a href="#" data-navigation-target="contact-information"
+                                                   class="dropdown-item">Profile</a>
+                                                <a href="#" class="dropdown-item">Add to archive</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item text-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+            <!-- ./ Chats sidebar -->
+
+            <!-- Friends sidebar -->
+            <div id="friends" class="sidebar">
+                <header>
+                    <span>好友列表</span>
+                    <ul class="list-inline">
+                        <li class="list-inline-item" data-toggle="tooltip" title="Add friends">
+                            <a class="btn btn-outline-light" href="#" data-toggle="modal" data-target="#addFriends">
+                                <i data-feather="user-plus"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item d-xl-none d-inline">
+                            <a href="#" class="btn btn-outline-light text-danger sidebar-close">
+                                <i data-feather="x"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </header>
+                <form>
+                    <input type="text" class="form-control" placeholder="根据昵称/手机号搜索好友">
+                </form>
+                <div class="sidebar-body">
+                    <ul class="list-group list-group-flush">
+            
+                        <li class="list-group-item" data-navigation-target="chats" v-for="(item, index) in friendsList" :index="index" @click="setChat(index)">
+                            <div>
+                                <figure class="avatar avatar-state-success">
+                                    <img :src="item.avatar" class="rounded-circle" alt="image" v-if="item.avatar">
+                                    <span class="avatar-title bg-success rounded-circle" v-if="!item.avatar">A</span>
+                                </figure>
+                            </div>
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>{{item.nickname}}</h5>
+                                    <p>{{item.motto}}</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">New chat</a>
+                                                <a href="#" data-navigation-target="contact-information"
+                                                   class="dropdown-item">Profile</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item text-danger">Block</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- <li class="list-group-item" data-navigation-target="chats">
+                            <div>
+                                <figure class="avatar avatar-state-success">
+                                    <img src="./dist/media/img/women_avatar1.jpg" class="rounded-circle" alt="image">
+                                </figure>
+                            </div>
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>Brietta Blogg</h5>
+                                    <p>Actuary</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">New chat</a>
+                                                <a href="#" data-navigation-target="contact-information"
+                                                   class="dropdown-item">Profile</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item text-danger">Block</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        
+                        <li class="list-group-item" data-navigation-target="chats">
+                            <div>
+                                <figure class="avatar avatar-state-success">
+                                    <span class="avatar-title bg-info rounded-circle">AD</span>
+                                </figure>
+                            </div>
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>Alina Derington</h5>
+                                    <p>Nurse</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">New chat</a>
+                                                <a href="#" data-navigation-target="contact-information"
+                                                   class="dropdown-item">Profile</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item text-danger">Block</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+            <!-- ./ Friends sidebar -->
+
+            <!-- Favorites sidebar -->
+            <div id="favorites" class="sidebar">
+                <header>
+                    <span>Favorites</span>
+                    <ul class="list-inline">
+                        <li class="list-inline-item d-xl-none d-inline">
+                            <a href="#" class="btn btn-outline-light text-danger sidebar-close">
+                                <i data-feather="x"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </header>
+                <form>
+                    <input type="text" class="form-control" placeholder="Search favorites">
+                </form>
+                <div class="sidebar-body">
+                    <ul class="list-group list-group-flush users-list">
+                        <li class="list-group-item">
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>Jennica Kindred</h5>
+                                    <p>I know how important this file is to you. You can trust me ;)</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">Open</a>
+                                                <a href="#" class="dropdown-item">Remove favorites</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>Marvin Rohan</h5>
+                                    <p>Lorem ipsum dolor sitsdc sdcsdc sdcsdcs</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">Open</a>
+                                                <a href="#" class="dropdown-item">Remove favorites</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>Frans Hanscombe</h5>
+                                    <p>Lorem ipsum dolor sitsdc sdcsdc sdcsdcs</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">Open</a>
+                                                <a href="#" class="dropdown-item">Remove favorites</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>Karl Hubane</h5>
+                                    <p>Lorem ipsum dolor sitsdc sdcsdc sdcsdcs</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">Open</a>
+                                                <a href="#" class="dropdown-item">Remove favorites</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- ./ Stars sidebar -->
+
+            <!-- Archived sidebar -->
+            <div id="archived" class="sidebar">
+                <header>
+                    <span>Archived</span>
+                    <ul class="list-inline">
+                        <li class="list-inline-item d-xl-none d-inline">
+                            <a href="#" class="btn btn-outline-light text-danger sidebar-close">
+                                <i data-feather="x"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </header>
+                <form>
+                    <input type="text" class="form-control" placeholder="Search archived">
+                </form>
+                <div class="sidebar-body">
+                    <ul class="list-group list-group-flush users-list">
+                        <li class="list-group-item">
+                            <figure class="avatar">
+                                <span class="avatar-title bg-danger rounded-circle">M</span>
+                            </figure>
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>Mercedes Pllu</h5>
+                                    <p>I know how important this file is to you. You can trust me ;)</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">Open</a>
+                                                <a href="#" class="dropdown-item">Restore</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item text-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <figure class="avatar">
+                                <span class="avatar-title bg-secondary rounded-circle">R</span>
+                            </figure>
+                            <div class="users-list-body">
+                                <div>
+                                    <h5>Rochelle Golley</h5>
+                                    <p>Lorem ipsum dolor sitsdc sdcsdc sdcsdcs</p>
+                                </div>
+                                <div class="users-list-action">
+                                    <div class="action-toggle">
+                                        <div class="dropdown">
+                                            <a data-toggle="dropdown" href="#">
+                                                <i data-feather="more-horizontal"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item">Open</a>
+                                                <a href="#" class="dropdown-item">Restore</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item text-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- ./ Archived sidebar -->
+
+        </div>
+        <!-- ./ sidebar group -->
+
+        <!-- chat -->
+        <!-- 当前聊天对象 -->
+        <div class="chat" v-if="showTalk">
+            <div class="chat-header">
+                <div class="chat-header-user">
+                    <figure class="avatar">
+                        <img :src="talkUser.user.avatar" class="rounded-circle" alt="image" v-if="talkUser.user.avatar">
+                        <span class="avatar-title bg-info rounded-circle" v-if="!talkUser.user.avatar" ></span>
+                    </figure>
+                    <div>
+                        <h5>{{talkUser.user.nickname}}</h5>
+                        <small class="text-success">
+                            <i>正在输入...</i>
+                        </small>
+                    </div>
+                </div>
+                <div class="chat-header-action">
+                    <ul class="list-inline">
+                        <li class="list-inline-item d-xl-none d-inline">
+                            <a href="#" class="btn btn-outline-light mobile-navigation-button">
+                                <i data-feather="menu"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item" data-toggle="tooltip" title="Voice call">
+                            <a href="#" class="btn btn-outline-light text-success" data-toggle="modal"
+                               data-target="#call">
+                                <i data-feather="phone"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item" data-toggle="tooltip" title="Video call">
+                            <a href="#" class="btn btn-outline-light text-warning" data-toggle="modal"
+                               data-target="#videoCall">
+                                <i data-feather="video"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="btn btn-outline-light" data-toggle="dropdown">
+                                <i data-feather="more-horizontal"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="#" data-navigation-target="contact-information" class="dropdown-item">查看信息</a>
+                                <a href="#" class="dropdown-item">添加到常联系</a>
+                                <a href="#" class="dropdown-item">删除好友</a>
+                                <div class="dropdown-divider"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="chat-body">
+                <div class="messages">
+                    <div :class="item.user_id == userInfo.id ? 'message-item outgoing-message' : 'message-item'" v-for="(item, index) in msgList" :index="index">
+                        <div class="message-avatar">
+                            <figure class="avatar">
+                                <img :src="item.user_id == userInfo.id ? userInfo.avatar : talkUser.user.avatar" class="rounded-circle" alt="image" v-if="userInfo.avatar || talkUser.user.avatar">
+                                <span class="avatar-title bg-info rounded-circle" v-if="!userInfo.avatar && !talkUser.user.avatar"></span>
+                            </figure>
+                            <div>
+                                <h5>{{item.user_id != userInfo.id ? talkUser.user.nickname : userInfo.nickname}}</h5>
+                                <div class="time">{{item.time}} <i class="ti-double-check text-info"></i></div>
+                            </div>
+                        </div>
+                        <div class="message-content">
+                            {{item.content}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 输入框 发送消息 -->
+            <div class="chat-footer">
+                <div>
+                    <div>
+                        <div class="btn btn-light mr-3" data-toggle="tooltip" title="Emoji" type="button">
+                            <i data-feather="smile"></i>
+                        </div>
+                    </div>          
+                    <input type="text" class="form-control" placeholder="请输入消息" v-model="content" @keyup.enter="sendMsg()">   
+                    <div class="form-buttons">
+                        <button class="btn btn-light" data-toggle="tooltip" title="Add files" type="button">
+                            <i data-feather="paperclip"></i>
+                        </button>
+                        <button class="btn btn-light d-sm-none d-block" data-toggle="tooltip"
+                                title="Send a voice record" type="button">
+                            <i data-feather="mic"></i>
+                        </button>
+                        <button class="btn btn-primary" type="button" @click="sendMsg()">
+                            <i data-feather="send"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+             <!-- 输入框 发送消息 -->
+        </div>
+        <!-- ./ chat -->
+        <!-- 个人信息 -->
+        <div class="sidebar-group">
+            <div id="contact-information" class="sidebar">
+                <header>
+                    <span>个人信息</span>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <a href="#" class="btn btn-outline-light text-danger sidebar-close">
+                                <i data-feather="x"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </header>
+                <div class="sidebar-body">
+                    <div class="pl-4 pr-4">
+                        <div class="text-center">
+                            <figure class="avatar avatar-xl mb-4">
+                                <img :src="userDetail.avatar" class="rounded-circle" alt="image" v-if="userDetail.avatar">
+                                <span class="avatar-title bg-info rounded-circle" v-if="!userDetail.avatar"></span>
+                            </figure>
+                            <h5 class="mb-1">{{userDetail.nickname}}</h5>
+                            <small class="text-muted font-italic">最近登录: 今天</small></small>
+
+                            <ul class="nav nav-tabs justify-content-center mt-5" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                       aria-controls="home" aria-selected="true">个人简介</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                                       aria-controls="profile" aria-selected="false">共享文件</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <p class="text-muted">{{userDetail.motto}}</p>
+                                <div class="mt-4 mb-4">
+                                    <h6>手机号</h6>
+                                    <p class="text-muted">{{userDetail.mobile}}</p>
+                                </div>
+                                <div class="mt-4 mb-4">
+                                    <h6>城市</h6>
+                                    <p class="text-muted">{{userDetail.city}}</p>
+                                </div>
+                                <div class="mt-4 mb-4">
+                                    <h6>性别</h6>
+                                    <p>
+                                        <a href="#">{{userInfo.gender ? '男' : '女'}}</a>
+                                    </p>
+                                </div>
+                                <div class="mt-4 mb-4">
+                                    <h6>个人网站</h6>
+                                    <p>
+                                        <a href="{{userDetail.website}}" target="_blank">{{userDetail.website}}</a>
+                                    </p>
+                                </div>
+                                <div class="mt-4 mb-4" v-if="userDetail.id != userInfo.id">
+                                    <h6 class="mb-3">设置</h6>
+                                    <div class="form-group">
+                                        <div class="form-item custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" checked=""
+                                                   id="customSwitch12">
+                                            <label class="custom-control-label" for="customSwitch12">消息免打扰</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-item custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="customSwitch13">
+                                            <label class="custom-control-label" for="customSwitch13">接收通知</label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <h6 class="mb-3 d-flex align-items-center justify-content-between">
+                                    <span>最近的文件</span>
+                                    <a href="#" class="btn btn-link small">
+                                        <i data-feather="upload" class="mr-2"></i> 上传
+                                    </a>
+                                </h6>
+                                <div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item pl-0 pr-0 d-flex align-items-center">
+                                            <a href="#">
+                                                <i class="fa fa-file-pdf-o text-danger mr-2"></i> report4221.pdf
+                                            </a>
+                                        </li>
+                                        <li class="list-group-item pl-0 pr-0 d-flex align-items-center">
+                                            <a href="#">
+                                                <i class="fa fa-image text-muted mr-2"></i> avatar_image.png
+                                            </a>
+                                        </li>
+                                        <li class="list-group-item pl-0 pr-0 d-flex align-items-center">
+                                            <a href="#">
+                                                <i class="fa fa-file-excel-o text-success mr-2"></i>
+                                                excel_report_file2020.xlsx
+                                            </a>
+                                        </li>
+                                        <li class="list-group-item pl-0 pr-0 d-flex align-items-center">
+                                            <a href="#">
+                                                <i class="fa fa-file-text-o text-warning mr-2"></i> articles342133.txt
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 个人信息 -->
+    </div>
+    <!-- ./ content -->
+
+</div>
+<!-- ./ layout -->
+                    <!-- <div class="message-item">
+                        <div class="message-avatar">
+                            <figure class="avatar">
+                                <img src="./dist/media/img/man_avatar3.jpg" class="rounded-circle" alt="image">
+                            </figure>
+                            <div>
+                                <h5>Byrom Guittet</h5>
+                                <div class="time">11:59 PM</div>
+                            </div>
+                        </div>
+                        <div class="message-content message-file">
+                            <div class="file-icon">
+                                <i class="fa fa-file-pdf-o"></i>
+                            </div>
+                            <div>
+                                <div>important_documents.pdf <i class="text-muted small">(50KB)</i></div>
+                                <ul class="list-inline">
+                                    <li class="list-inline-item mb-0"><a href="#">Download</a></li>
+                                    <li class="list-inline-item mb-0"><a href="#">View</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="message-item messages-divider sticky-top" data-label="Today"></div> -->
+                    <!-- <div class="message-item">
+                        <div class="message-avatar">
+                            <figure class="avatar">
+                                <img src="./dist/media/img/man_avatar3.jpg" class="rounded-circle" alt="image">
+                            </figure>
+                            <div>
+                                <h5>Byrom Guittet</h5>
+                                <div class="time">10:43 AM</div>
+                            </div>
+                        </div>
+                        <figure>
+                            <img src="dist/media/img/image1.jpg" class="w-25 img-fluid rounded" alt="image">
+                        </figure>
+                    </div> -->
+                    <!-- <div class="message-item messages-divider" data-label="1 message unread"></div> -->
+<!-- Bundle -->
+<script src="https://www.jq22.com/jquery/jquery-3.3.1.js"></script>
+<script src="./vendor/bundle.js"></script>
+<script src="./vendor/feather.min.js"></script>
+<script src="./vendor/enjoyhint/enjoyhint.min.js"></script>
+
+<!-- App scripts -->
+<script src="./dist/js/app.min.js"></script>
+<!-- Examples -->
+<!-- <script src="./dist/js/examples.js"></script> -->
+</body>
+<script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
+<script src="./dist/layer/layer.js"></script>
+<script src="./dist/js/request.js"></script>
+<script>
+const App = {
+    data() {
+        return {
+            userInfo: '',               // 登录用户详情
+            userDetail: '',             // 用户个人详情
+            friendsList: '',            // 好友列表   
+            talksList: '',              // 聊天列表
+            talkUser: '',               // 当前聊天用户  
+            showTalk: false,            // 显示聊天框   
+            content: '',                // 发送的消息 
+            msgList: [],                // 消息列表   
+            websocket: null,            //websocket实例    
+        }
+    },
+    mounted() {  
+        var token = localStorage.getItem('ACCESS_TOKEN')
+        if (!token) {
+            window.location.href = 'login.html'
+        }
+        this.initWebsocket()
+    },
+    created() {     
+        this.getDetail()    // 个人详情
+        this.getFriends()   // 获取好友列表
+        this.getTalks()     // 获取聊天列表  
+    },
+    destroyed() {
+        // 离开之后断开websocket连接
+        this.websock.close()
+    },
+    methods: {
+        initWebsocket() {
+            var token = localStorage.getItem('ACCESS_TOKEN');
+            this.websocket = new WebSocket("ws://127.0.0.1:7272/?token=" + token);
+            this.websocket.onmessage = this.wsrecive
+            this.websocket.onopen = this.wsopen
+            this.websocket.onerror = this.wserror
+            this.websocket.onclose = this.wsclose
+        },
+        // 个人详情
+        getDetail() {
+            let that =this
+            request("users/detail").then(function(res) {
+                if (res.code == 200) {
+                    that.userInfo = res.data
+                    that.userDetail = res.data
+                    console.log(res.data.id)
+                } else {
+                    layer.msg(res.message)
+                }
+            })
+        },
+        
+        // 获取好友列表
+        getFriends() {
+            let that =this
+            request("contact/list").then(function(res) {
+                if (res.code == 200) {
+                    that.friendsList = res.data
+                } else {
+                    layer.msg(res.message)
+                }
+            })
+        },
+        // 获取聊天列表
+        getTalks() {
+            let that =this
+            request("talk/talk_list").then(function(res) {
+                if (res.code == 200) {
+                    that.talksList = res.data  
+                    if (that.talksList) {
+                        that.talkUser = that.talksList[0]
+                        that.getMsgList(that.talkUser.user.id)
+                        that.showTalk = true
+                    }
+                } else {
+                    layer.msg(res.message)
+                }
+            })
+        },
+        // 获取聊天记录
+        getMsgList(receiver_id) {
+            let that =this
+            that.msgList = []
+            var url = 'talk/record_list/' + receiver_id
+            request(url).then(function(res) {
+                if (res.code == 200) {
+                    that.msgList = res.data                
+                } else {
+                    layer.msg(res.message)
+                }
+                setTimeout(function(){
+                    that.scrollBotton()
+                },1000); 
+            })
+        },
+        // 设置聊天用户
+        setChat(index) {
+            this.talkUser = this.talksList[index]
+            //this.userDetail = []
+            this.userDetail = this.talkUser.user
+            console.log(this.userDetail)
+            this.getMsgList(this.talkUser.user.id)
+        },
+        // 发送消息
+        sendMsg() {
+            let that =this
+            if (this.content == '') {
+                layer.msg('消息不能为空')
+                return
+            }
+            var data = {         
+                'talk_type': 0,
+                'msg_type': 1,
+                'user_id': that.talkUser.user_id,
+                'receiver_id': that.talkUser.receiver_id, 
+                'content': that.content, 
+                'time': new Date().getTime()                
+            }
+            that.voice()
+            that.msgList.push(data)
+            that.scrollBotton()
+            that.wssend(JSON.stringify(data))
+            this.content = ''
+        },
+        
+        wsopen() {
+            // 连接建立之后执行send方法发送数据
+            console.log('连接建立')
+        },
+        wserror() {
+            // 连接建立失败重连
+            this.initWebSocket()
+        },
+        wsrecive(e) {
+            // 数据接收
+            let that = this
+            const res = JSON.parse(e.data)
+            
+            if (res.msg_type) {
+                this.msgList.push(res)
+                console.log(this.msgList)
+                console.log('接收的数据', res)
+                that.voice('recive')
+                that.scrollBotton()
+            }
+            
+        },
+         // 数据发送
+        wssend(data) {
+            this.websocket.send(data)
+        },
+        // 关闭
+        wsclose(e) {
+            console.log('断开连接', e)
+        },
+
+        // 聊天消息自动滚动到底部
+        scrollBotton(){
+            var box = $('.messages')[0].scrollHeight
+            $(".chat-body").animate({scrollTop: box},'slow')
+        },
+        // 退出登录
+        logout() {
+            request("auth/logout", 'post').then(function(res) {
+                if (res.code == 200) {
+                    layer.msg('退出成功')
+                    setTimeout(function(){    
+                        localStorage.clear() 
+                        window.location.href = 'login.html'
+                    },2000);       
+                } else {
+                    layer.msg(res.message)
+                }
+            })
+        },
+        // 播放声音
+        voice(type='send') {
+            audio = document.createElement("audio");
+            audio.src = './dist/mp3/' + type + '.mp3';
+            audio.play();
+        },
+    }
+}
+Vue.createApp(App).mount('#app')
+</script>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web IM</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="./dist/media/img/favicon.png" type="image/png">
+
+    <!-- Bundle Styles -->
+    <link rel="stylesheet" href="./vendor/bundle.css">
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="./dist/css/app.min.css">
+</head>
+<body class="form-membership">
+
+<div class="form-wrapper" id="app">
+    <h5>登录</h5>
+    <!-- form -->
+    <div class="form-group">
+        <input type="text" class="form-control" v-model="mobile" placeholder="手机号" required autofocus>
+    </div>
+    <div class="form-group">
+        <input type="password" class="form-control" v-model="password" placeholder="密码" required>
+    </div>
+    <div class="form-group d-flex justify-content-between">
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" checked="" id="customCheck1">
+            <label class="custom-control-label" for="customCheck1">记住密码</label>
+        </div>
+        <a href="./reset-password.html">忘记密码？</a>
+    </div>
+    <button class="btn btn-primary btn-block" @click="login()">立即登录</button>
+    <p class="text-muted"></p>
+    <a href="./register.html" class="btn btn-outline-light btn-sm">还没有账号？立即注册</a>
+    <!-- ./ form -->
+
+</div>
+
+<!-- Bundle -->
+<script src="https://www.jq22.com/jquery/jquery-3.3.1.js"></script>
+<script src="./vendor/bundle.js"></script>
+<script src="./vendor/feather.min.js"></script>
+
+<!-- App scripts -->
+<script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
+<script src="./dist/layer/layer.js"></script>
+<script src="./dist/js/request.js"></script>
+<script src="./dist/js/app.min.js"></script>
+</body>
+
+<script>
+const App = {
+    data() {
+        return {
+            mobile: ['16666666666', '18888888888'][Math.round(Math.random())],
+            password: 'lemoba',
+        }
+    },
+    methods: {
+       login() {
+            if(this.mobile === ''){ 
+                layer.msg("请输入正确的手机号码");  
+                return false; 
+            }  
+            if(this.password === ''){ 
+                layer.msg("请输入密码");  
+                return false; 
+            } 
+            var load = layer.load(2, {shade: false}); //0代表加载的风格，支持0-2
+            request("auth/login", 'post', {
+                mobile: this.mobile, 
+                password: this.password
+            }).then(function(res) {
+                if (res.code == 200) {
+                    localStorage.setItem('ACCESS_TOKEN', res.data.access_token)
+                    localStorage.setItem('REFRESH_TOKEN', res.data.refresh_token)           
+                    setTimeout(function(){
+                        layer.close(load)  
+                        window.location.href = 'index.html'
+                    },2000);
+                } else {
+                    layer.msg(res.message)
+                }
+            })
+       }
+    }
+}
+Vue.createApp(App).mount('#app')
+</script>
+</html>
