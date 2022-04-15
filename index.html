@@ -130,32 +130,44 @@
 <!-- ./ voice call modal -->
 
 <!-- add friends modal -->
+<!-- 添加好友选项卡 -->
 <div class="modal fade" id="addFriends" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i data-feather="user-plus" class="mr-2"></i> Add Friends
+                    <i data-feather="user-plus" class="mr-2"></i> 添加好友
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i class="ti-close"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="alert alert-info">Send invitations to friends.</div>
+                <div class="alert alert-info">向好友发送邀请...</div>
                 <form>
                     <div class="form-group">
-                        <label for="emails" class="col-form-label">Email addresses</label>
-                        <input type="text" class="form-control" id="emails">
+                        <label for="mobile" class="col-form-label" >手机号</label>
+                        <input type="text" class="form-control" id="mobile" v-model="mobile">
+                    </div>                     
+                    <div style="display: flex;" v-if="hasUser">
+                        <figure class="avatar avatar-state-success">
+                            <img :src="searchList.avatar" class="rounded-circle" alt="image" v-if="searchList.avatar">
+                            <span class="avatar-title bg-info rounded-circle" v-if="!searchList.avatar">{{}}</span>
+                        </figure>                
+                        <div class="users-list-body" style="margin-left: 10px;">
+                            <div>
+                                <h5 class="text-primary">{{searchList.nickname}}</h5>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="message" class="col-form-label">Invitation message</label>
-                        <textarea class="form-control" id="message"></textarea>
+                        <label for="message" class="col-form-label">附加信息</label>
+                        <textarea class="form-control" id="message" @focus='searchFriend()' v-model="addMsg()"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" @click="addFriend()">发送</button>
             </div>
         </div>
     </div>
@@ -486,7 +498,7 @@
                     </a>
                     <div class="dropdown-menu">
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editProfileModal">编辑信息</a>
-                        <a href="#" class="dropdown-item" data-navigation-target="contact-information">个人信息</a>
+                        <a href="#" class="dropdown-item" data-navigation-target="contact-information" @click="selfInfo()">个人信息</a>
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#settingModal">设置</a>
                         <div class="dropdown-divider"></div>
                         <a href="javascript:void(0)"class="dropdown-item text-danger" @click="logout()">退出登录</a>
@@ -541,7 +553,7 @@
                             <div class="users-list-body">
                                 <div>
                                     <h5 class="text-primary">{{item.user.nickname}}</h5>
-                                    <p>What's up, how are you?</p>
+                                    <p>{{this.msgList}}</p>
                                 </div>
                                 <div class="users-list-action">
                                     <div class="new-message-count">3</div>
@@ -674,7 +686,7 @@
                 <header>
                     <span>好友列表</span>
                     <ul class="list-inline">
-                        <li class="list-inline-item" data-toggle="tooltip" title="Add friends">
+                        <li class="list-inline-item" data-toggle="tooltip" title="添加好友">
                             <a class="btn btn-outline-light" href="#" data-toggle="modal" data-target="#addFriends">
                                 <i data-feather="user-plus"></i>
                             </a>
@@ -1029,7 +1041,7 @@
                             </figure>
                             <div>
                                 <h5>{{item.user_id != userInfo.id ? talkUser.user.nickname : userInfo.nickname}}</h5>
-                                <div class="time">{{item.time}} <i class="ti-double-check text-info"></i></div>
+                                <div class="time">{{item.created_at}} <i class="ti-double-check text-info"></i></div>
                             </div>
                         </div>
                         <div class="message-content">
@@ -1222,9 +1234,9 @@
                     </div> -->
                     <!-- <div class="message-item messages-divider" data-label="1 message unread"></div> -->
 <!-- Bundle -->
-<script src="https://www.jq22.com/jquery/jquery-3.3.1.js"></script>
-<script src="./vendor/bundle.js"></script>
 <script src="./vendor/feather.min.js"></script>
+<script src="./vendor/jquery-3.5.1.min.js"></script>
+<script src="./vendor/bundle.js"></script>
 <script src="./vendor/enjoyhint/enjoyhint.min.js"></script>
 
 <!-- App scripts -->
@@ -1246,7 +1258,11 @@ const App = {
             talkUser: '',               // 当前聊天用户  
             showTalk: false,            // 显示聊天框   
             content: '',                // 发送的消息 
-            msgList: [],                // 消息列表   
+            msgList: [],                // 消息列表 
+            hasUser: false,             // 是否有该用户
+            mobile: '',                 // 搜索手机号 
+            addMsg: '',                 // 附加信息
+            searchList: '',                 // 搜索详情 
             websocket: null,            //websocket实例    
         }
     },
@@ -1323,7 +1339,7 @@ const App = {
             var url = 'talk/record_list/' + receiver_id
             request(url).then(function(res) {
                 if (res.code == 200) {
-                    that.msgList = res.data                
+                    that.msgList = res.data              
                 } else {
                     layer.msg(res.message)
                 }
@@ -1337,7 +1353,6 @@ const App = {
             this.talkUser = this.talksList[index]
             //this.userDetail = []
             this.userDetail = this.talkUser.user
-            console.log(this.userDetail)
             this.getMsgList(this.talkUser.user.id)
         },
         // 发送消息
@@ -1353,7 +1368,7 @@ const App = {
                 'user_id': that.talkUser.user_id,
                 'receiver_id': that.talkUser.receiver_id, 
                 'content': that.content, 
-                'time': new Date().getTime()                
+                'created_at': new Date().getTime()                
             }
             that.voice()
             that.msgList.push(data)
@@ -1361,7 +1376,39 @@ const App = {
             that.wssend(JSON.stringify(data))
             this.content = ''
         },
-        
+        // 个人信息设置
+        selfInfo() {
+            this.userDetail = this.userInfo
+            console.log(this.userDetail)
+        },
+        // 留言
+        searchFriend() {
+            let that = this
+            if (that.mobile == '') {
+                layer.msg('请输入搜索的手机号')
+                return
+            }
+            request("contact/search", 'post', {'mobile': that.mobile}).then(function(res) {
+                if (res.code == 200) {
+                    that.searchList = res.data
+                    that.hasUser = true
+                    console.log(res.data);
+                } else {
+                    layer.msg(res.message)
+                }
+            })
+        },
+        // 添加手机号
+        addFriend() {
+            if (this.mobile == '') {
+                layer.msg('请输入搜索的手机号')
+                return
+            }
+            if (this.searchList.mobile == this.userInfo.mobile) {
+                layer.msg('不能添加自己为好友')
+                return 
+            }
+        },
         wsopen() {
             // 连接建立之后执行send方法发送数据
             console.log('连接建立')
